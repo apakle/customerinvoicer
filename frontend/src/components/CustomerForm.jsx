@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const CustomerForm = () => {
   const [customer, setCustomer] = useState({
@@ -11,6 +12,8 @@ const CustomerForm = () => {
       city: ''
     }
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +40,7 @@ const CustomerForm = () => {
       .then(response => {
         console.log('Customer created:', response.data);
         setCustomer({ firstName: '', lastName: '', address: { street: '', zip: '', city: '' } });
+        navigate('/customers');
       })
       .catch(error => console.error(error));
   };

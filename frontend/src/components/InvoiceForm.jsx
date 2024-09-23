@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const CreateInvoice = () => {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState('');
     const [positions, setPositions] = useState([{ position: 1, quantity: '', description: '', price: '' }]);
-    const [invoice, setInvoice] = useState({ date: '', positions: [] });
+    const [invoice, setInvoice] = useState({ date: new Date().toISOString().split('T')[0], positions: [] });
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch customers for selection
@@ -60,7 +63,7 @@ const CreateInvoice = () => {
         axios.post(`http://localhost:8080/api/invoices/customer/${selectedCustomer}`, { ...invoice, customerId: selectedCustomer })
             .then(response => {
                 console.log('Invoice created:', response.data);
-                // Reset form or redirect
+                navigate('/invoices');
             })
             .catch(error => console.error('Error creating invoice:', error));
     };
