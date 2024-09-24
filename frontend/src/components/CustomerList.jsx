@@ -11,11 +11,13 @@ const CustomerList = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Customer List</h2>
-      <ul>
+    <div className="card">
+      <div className="card-header">
+        <h2>Customer List</h2>
+      </div>
+      <ul className="list-group list-group-flush">
         {customers.map(customer => (
-          <li key={customer.id}>
+          <li key={customer.id} className="list-group-item">
             {customer.firstName} {customer.lastName}, {customer.address.street}, {customer.address.zip} {customer.address.city}
           </li>
         ))}

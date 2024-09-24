@@ -1,0 +1,53 @@
+/* Regular styles */
+.invoice-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Print styles */
+  @media print {
+    @page {
+      size: landscape;
+      margin: 0.5cm;
+    }
+  
+    body {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    /* Hide header and other non-invoice elements */
+    header, nav, footer, .no-print {
+      display: none !important;
+    }
+  
+    .invoice-container {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  
+    /* Adjust font sizes for better fit */
+    body {
+      font-size: 10pt;
+    }
+  
+    h1 {
+      font-size: 18pt;
+    }
+  
+    h5 {
+      font-size: 12pt;
+    }
+  
+    /* Ensure table fits on one page */
+    .table {
+      font-size: 9pt;
+    }
+  
+    /* Break inside avoidance */
+    tr, td, th, tbody, thead, tfoot {
+      page-break-inside: avoid !important;
+    }
+  }

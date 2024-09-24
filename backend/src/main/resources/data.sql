@@ -8,12 +8,12 @@ INSERT INTO invoice (invoice_number, date, total_amount, customer_id) VALUES
 ('22/1', '2022-09-01', 150.0, 2),
 ('24/1', '2024-09-05', 299.0, 1);
 
--- Sample Invoice Positions for INV001
+-- Sample Invoice Positions for 22/1
 INSERT INTO invoice_position (position, quantity, description, price, total_price, invoice_id) VALUES
 (1, 2, 'Widget A', 25.0, 50.0, 1),
 (2, 1, 'Widget B', 100.0, 100.0, 1);
 
--- Sample Invoice Positions for INV002
+-- Sample Invoice Positions for 24/1
 INSERT INTO invoice_position (position, quantity, description, price, total_price, invoice_id) VALUES
 (1, 3, 'Gadget X', 50.0, 150.0, 2),
 (2, 1, 'Gadget Y', 49.0, 49.0, 2);

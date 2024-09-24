@@ -8,24 +8,21 @@ const InvoiceList = () => {
   const [availableYears, setAvailableYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState('all');
 
-  // Fetch all invoices initially
   useEffect(() => {
     axios.get('http://localhost:8080/api/invoices')
       .then(response => {
         const invoices = response.data;
         setInvoices(invoices);
-        setFilteredInvoices(invoices); // Initialize with all invoices
-        // Extract unique years from invoices
+        setFilteredInvoices(invoices);
         const years = [...new Set(invoices.map(invoice => new Date(invoice.date).getFullYear()))];
         setAvailableYears(years);
       })
       .catch(error => console.error(error));
   }, []);
 
-  // Handle filtering invoices by year
   useEffect(() => {
     if (selectedYear === 'all') {
-      setFilteredInvoices(invoices); // Show all invoices
+      setFilteredInvoices(invoices);
     } else {
       const filtered = invoices.filter(invoice => new Date(invoice.date).getFullYear() === parseInt(selectedYear));
       setFilteredInvoices(filtered);
@@ -34,30 +31,26 @@ const InvoiceList = () => {
 
   return (
     <div>
-      <h2>Invoice List</h2>
-
-      {/* Dropdown for selecting the year */}
-      <div>
-        <label htmlFor="year-filter">Filter by Year: </label>
+      <h2 className="mb-3">Invoice List</h2>
+      <div className="mb-3">
+        <label htmlFor="year-filter" className="form-label">Filter by Year</label>
         <select
           id="year-filter"
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
+          className="form-select w-auto"
         >
           <option value="all">All Invoices</option>
           {availableYears.map(year => (
-            <option key={year} value={year}>
-              {year}
-            </option>
+            <option key={year} value={year}>{year}</option>
           ))}
         </select>
       </div>
-
-      <ul>
+      <ul className="list-group">
         {filteredInvoices.map(invoice => (
-          <li key={invoice.id}>
+          <li key={invoice.id} className="list-group-item">
             {invoice.invoiceNumber} - {new Date(invoice.date).toLocaleDateString()} - Total: {invoice.totalAmount} - {' '}
-            <Link to={`/invoices/${invoice.id}`}>
+            <Link to={`/invoices/${invoice.id}`} className="btn btn-link">
               Details
             </Link>
           </li>
