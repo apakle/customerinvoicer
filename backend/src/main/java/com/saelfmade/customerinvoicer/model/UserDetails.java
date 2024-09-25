@@ -15,6 +15,7 @@ public class UserDetails {
     
     private String phoneNumber;
     private String bankAccount;
+    private String taxNumber;
 
     public UserDetails() {}
 
@@ -64,4 +65,12 @@ public class UserDetails {
     public void setBankAccount(String bankAccount) {
         this.bankAccount = bankAccount;
     }
+
+	public String getTaxNumber() {
+		return taxNumber;
+	}
+
+	public void setTaxNumber(String taxNumber) {
+		this.taxNumber = taxNumber;
+	}
 }

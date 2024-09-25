@@ -42,7 +42,7 @@ public class InvoiceService {
     
     // Generate the invoice number in the format "YY/N"
     private String generateInvoiceNumber(Invoice invoice) {
-    	Date invoiceDate = invoice.getDate();
+    	Date invoiceDate = invoice.getInvoiceDate();
     	// Convert Date to LocalDate
         LocalDate localDate  = invoiceDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         // Extract the year

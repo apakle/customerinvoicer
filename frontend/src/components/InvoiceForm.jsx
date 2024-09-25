@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const CreateInvoice = () => {
+const InvoiceForm = () => {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState('');
     const [positions, setPositions] = useState([{ position: 1, quantity: '', description: '', price: '' }]);
-    const [invoice, setInvoice] = useState({ date: new Date().toISOString().split('T')[0], positions: [] });
+    const [invoice, setInvoice] = useState({ invoiceDate: new Date().toISOString().split('T')[0], serviceDate: '', description: '', positions: [] });
 
     const navigate = useNavigate();
 
@@ -72,28 +72,53 @@ const CreateInvoice = () => {
         <div className="container mt-4">
             <h1>Create Invoice</h1>
             <form onSubmit={handleSubmit} className="mt-3">
-                <div className="mb-3">
-                    <label htmlFor="date" className="form-label">Date:</label>
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={invoice.date}
-                        onChange={handleInvoiceChange}
-                        className="form-control w-auto"
-                        required
-                    />
+                <div className="d-flex gap-3 mb-3">
+                    <div className="mb-3">
+                        <label htmlFor="customer" className="form-label">Customer:</label>
+                        <select id="customer" value={selectedCustomer} onChange={handleCustomerChange} className="form-select w-auto" required>
+                            <option value="">Select a customer</option>
+                            {customers.map(customer => (
+                                <option key={customer.id} value={customer.id}>
+                                    {customer.firstName} {customer.lastName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="date" className="form-label">Rechnungsdatum:</label>
+                        <input
+                            type="date"
+                            id="invoiceDate"
+                            name="invoiceDate"
+                            value={invoice.invoiceDate}
+                            onChange={handleInvoiceChange}
+                            className="form-control w-auto"
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="date" className="form-label">Leistungsdatum:</label>
+                        <input
+                            type="date"
+                            id="serviceDate"
+                            name="serviceDate"
+                            value={invoice.serviceDate}
+                            onChange={handleInvoiceChange}
+                            className="form-control w-auto"
+                            required
+                        />
+                    </div>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="customer" className="form-label">Customer:</label>
-                    <select id="customer" value={selectedCustomer} onChange={handleCustomerChange} className="form-select w-auto" required>
-                        <option value="">Select a customer</option>
-                        {customers.map(customer => (
-                            <option key={customer.id} value={customer.id}>
-                                {customer.firstName} {customer.lastName}
-                            </option>
-                        ))}
-                    </select>
+                    <label htmlFor="description" className="form-label">Leistungsbeschreibung:</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        value={invoice.description}
+                        onChange={handleInvoiceChange}
+                        className="form-control"
+                        placeholder="Hier kann eine zusätzliche Beschreibung hinzugefügt werden"
+                    />
                 </div>
                 <div className="mb-3">
                     <h3>Positions</h3>
@@ -162,4 +187,4 @@ const CreateInvoice = () => {
     );
 };
 
-export default CreateInvoice;
+export default InvoiceForm;
