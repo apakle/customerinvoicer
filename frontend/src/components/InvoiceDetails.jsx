@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate  } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/InvoiceDetails.css';   // Custom CSS for print styles
 
 const InvoiceDetails = () => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const { id } = useParams();  // Get invoice ID from the route
     const [invoice, setInvoice] = useState(null);
     const [users, setUsers] = useState([]); 
-    const navigate = useNavigate(); 
 
     useEffect(() => {
         // Fetch invoice by ID
-        axios.get(`http://localhost:8080/api/invoices/${id}`)
+        axios.get(`${backendUrl}/api/invoices/${id}`)
             .then(response => setInvoice(response.data))
             .catch(error => console.error('Error fetching invoice:', error));
-    }, [id]);
+    }, [id, backendUrl]);
 
     useEffect(() => {
         // Fetch user details
-        axios.get('http://localhost:8080/api/userdetails')
+        axios.get(`${backendUrl}/api/userdetails`)
             .then(response => setUsers(response.data))
             .catch(error => console.error('Error fetching user details:', error));
-    }, []);
+    }, [backendUrl]);
 
     if (!invoice) {
         return <div>Loading...</div>;
@@ -39,75 +39,78 @@ const InvoiceDetails = () => {
     // Display version for the screen
     const DisplayVersion = () => (
         <div className="display-version">
-            <div className="position-relative d-flex justify-content-center align-items-center mb-3" style={{ height: '60px' }}>
-                <button className="btn btn-secondary position-absolute start-0" onClick={() => navigate('/invoices')}>
-                    Zurück zu allen Rechnungen
-                </button>
-                <h1 className="text-center">Rechnung {invoice.invoiceNumber}</h1>
-            </div>
-            <div className="row mt-4">
-                <div className="col-6">
-                    <div><strong>Kunde:</strong></div>
-                    <div>{invoice.customer.firstName} {invoice.customer.lastName}</div>
-                    <div>{invoice.customer.address.street}</div>
-                    <div>{invoice.customer.address.zip} {invoice.customer.address.city}</div>
-                </div>
-            </div>
-             {/* Row for Invoice Number and Date */}
-            <div className="row mt-3 justify-content-between">
-                <div className="col-auto">
-                    <p><strong>Rechnung Nr.:</strong> {invoice.invoiceNumber}</p>
-                </div>
-                <div className="col-auto text-end">
-                    <div><strong>Rechnungsdatum:</strong> {new Date(invoice.invoiceDate).toLocaleDateString()}</div>
-                    <div><strong>Leistungsdatum:</strong> {new Date(invoice.serviceDate).toLocaleDateString()}</div>
-                </div>
-            </div>
-            <p className="mt-3 mb-4"><strong>Leistungsbeschreibung:</strong> {invoice.description}</p>
+            <div className="card">
+                <div className="card-header">
+                    <Link to={'/invoices'} className="btn btn-link"> Zurück zu allen Rechnungen</Link>
+                </div>      
+                <div className="card-body">  
+                <h3 className="text-center">Rechnung {invoice.invoiceNumber}</h3>          
+                    <div className="row mt-4">
+                        <div className="col-6">
+                            <div><strong>Kunde:</strong></div>
+                            <div>{invoice.customer.firstName} {invoice.customer.lastName}</div>
+                            <div>{invoice.customer.address.street}</div>
+                            <div>{invoice.customer.address.zip} {invoice.customer.address.city}</div>
+                        </div>
+                    </div>
+                    {/* Row for Invoice Number and Date */}
+                    <div className="row mt-3 justify-content-between">
+                        <div className="col-auto">
+                            <p><strong>Rechnung Nr.:</strong> {invoice.invoiceNumber}</p>
+                        </div>
+                        <div className="col-auto">
+                            <div><strong>Rechnungsdatum:</strong> {new Date(invoice.invoiceDate).toLocaleDateString()}</div>
+                            <div><strong>Leistungsdatum:</strong> {new Date(invoice.serviceDate).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                    <p className="mt-3 mb-4"><strong>Leistungsbeschreibung:</strong> {invoice.description}</p>
+                    <div className="table-responsive">
+                        <table className="table table-bordered table-striped mt-2">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th>Pos</th>
+                                    <th>Menge</th>
+                                    <th>Leistung</th>
+                                    <th>Einzelpreis (€)</th>
+                                    <th >Gesamtpreis (€)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {invoice.positions.map(position => (
+                                    <tr key={position.id}>
+                                        <td>{position.position}</td>
+                                        <td>{position.quantity}</td>
+                                        <td>{position.description}</td>
+                                        <td>{position.price.toFixed(2)}</td>
+                                        <td>{position.totalPrice.toFixed(2)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
 
-            <table className="table table-bordered table-striped mt-2">
-                <thead className="table-dark">
-                    <tr>
-                        <th>Pos</th>
-                        <th>Menge</th>
-                        <th>Leistung</th>
-                        <th>Einzelpreis (€)</th>
-                        <th >Gesamtpreis (€)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {invoice.positions.map(position => (
-                        <tr key={position.id}>
-                            <td>{position.position}</td>
-                            <td>{position.quantity}</td>
-                            <td>{position.description}</td>
-                            <td>{position.price.toFixed(2)}</td>
-                            <td>{position.totalPrice.toFixed(2)}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                    <div className="row">
+                        <div className="col text-end">
+                            <h4><strong>Rechnungsbetrag: </strong>{invoice.totalAmount.toFixed(2)} €</h4>
+                        </div>
+                    </div>
 
-            <div className="row">
-                <div className="col text-end">
-                    <h4><strong>Rechnungsbetrag: </strong>{invoice.totalAmount.toFixed(2)} €</h4>
-                </div>
-            </div>
+                    <div className="row">
+                        <div className="col-6 mt-5">
+                            <p className="text-muted"> Hinweis: Als Kleinunternehmer im Sinne von § 19 Abs. 1 UStG wird Umsatzsteuer nicht berechnet.</p>
+                            <p><u><strong> Zahlbar innerhalb 10 Tagen ohne Abzug</strong></u></p>
+                        </div>
+                        <div className="col-6 mt-5">
+                            <div><strong>IBAN:</strong> {formattedIban}</div>
+                            <div><strong>Bankverbindung:</strong> Volksbank Rhein-Wehra eG, <strong>BIC:</strong> GENODE61BSK</div>
+                        </div>
+                    </div>
 
-            <div className="row">
-                <div className="col-6 mt-5">
-                    <p className="text-muted"> Hinweis: Als Kleinunternehmer im Sinne von § 19 Abs. 1 UStG wird Umsatzsteuer nicht berechnet.</p>
-                    <p><u><strong> Zahlbar innerhalb 10 Tagen ohne Abzug</strong></u></p>
-                </div>
-                <div className="col-6 mt-5">
-                    <div><strong>IBAN:</strong> {formattedIban}</div>
-                    <div><strong>Bankverbindung:</strong> Volksbank Rhein-Wehra eG, <strong>BIC:</strong> GENODE61BSK</div>
-                </div>
-            </div>
-
-            <div className="row mt-3">
-                <div className="col text-center">
-                    <button className="btn btn-primary" onClick={handlePrint}>Print Invoice</button>
+                    <div className="row mt-3">
+                        <div className="col text-center">
+                            <button className="btn btn-primary" onClick={handlePrint}>Print Invoice</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

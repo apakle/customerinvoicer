@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const UserDetailsList = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/userdetails')
+    axios.get(`${backendUrl}/api/userdetails`)
       .then(response => {
         setUserDetails(response.data);
         setLoading(false);
@@ -15,15 +16,17 @@ const UserDetailsList = () => {
         console.error('Error fetching user details:', error);
         setLoading(false);
       });
-  }, []);
+  }, [backendUrl]);
 
   if (loading) {
     return <p>Loading user details...</p>;
   }
 
   return (
-    <div className="container mt-5">
-      <h2>User Details</h2>
+    <div className="card">
+      <div className="card-header">
+        <h2>User Details</h2>
+      </div>
       <div className="list-group">
         {userDetails.map((user) => (
           <div key={user.id} className="list-group-item">

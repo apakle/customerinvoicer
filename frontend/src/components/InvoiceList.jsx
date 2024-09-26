@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const InvoiceList = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const [invoices, setInvoices] = useState([]);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [availableYears, setAvailableYears] = useState([]);
@@ -11,7 +12,7 @@ const InvoiceList = () => {
   const [selectedCustomer, setSelectedCustomer] = useState('all');
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/invoices')
+    axios.get(`${backendUrl}/api/invoices`)
       .then(response => {
         const invoices = response.data;
         setInvoices(invoices);
@@ -26,7 +27,7 @@ const InvoiceList = () => {
         setAvailableCustomers(customers);
       })
       .catch(error => console.error(error));
-  }, []);
+  }, [backendUrl]);
 
   useEffect(() => {
     let filtered = invoices;
@@ -90,23 +91,21 @@ const InvoiceList = () => {
                 <th>Kunde</th>
                 <th>Leistungsdatum</th>
                 <th>Rechnungsdatum</th>
-                <th>Total Amount</th>
-                <th>Actions</th>
+                <th>Total Amount</th>                
               </tr>
             </thead>
             <tbody>
               {filteredInvoices.map(invoice => (
                 <tr key={invoice.id}>
-                  <td>{invoice.invoiceNumber}</td>
+                  <td>
+                    <Link to={`/invoices/${invoice.id}`} className="btn btn-link">
+                    {invoice.invoiceNumber}
+                    </Link>
+                  </td>
                   <td>{invoice.customer.firstName} {invoice.customer.lastName}</td>
                   <td>{new Date(invoice.serviceDate).toLocaleDateString()}</td>
                   <td>{new Date(invoice.invoiceDate).toLocaleDateString()}</td>
-                  <td>{invoice.totalAmount}</td>
-                  <td>
-                    <Link to={`/invoices/${invoice.id}`} className="btn btn-link">
-                      Details
-                    </Link>
-                  </td>
+                  <td>{invoice.totalAmount}</td>                  
                 </tr>
               ))}
             </tbody>

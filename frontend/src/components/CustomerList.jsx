@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const CustomerList = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/customers')
+    axios.get(`${backendUrl}/api/customers`)
       .then(response => setCustomers(response.data))
       .catch(error => console.error(error));
-  }, []);
+  }, [backendUrl]);
 
   return (
     <div className="card">

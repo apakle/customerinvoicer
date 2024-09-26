@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, Link } from 'react-router-dom';
 import CustomerList from './components/CustomerList';
 import CustomerForm from './components/CustomerForm';
 import InvoiceList from './components/InvoiceList';
@@ -9,7 +9,7 @@ import UserDetailsList from './components/UserDetailsList';
 
 function App() {
   return (
-    <Router>
+    <div className="App">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">Customer Invoicer</Link>
@@ -48,7 +48,7 @@ function App() {
           <Route path="/userdetails" element={<UserDetailsList />} />
         </Routes>
       </div>
-    </Router>
+    </div>
   );
 }
 
