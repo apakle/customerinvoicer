@@ -1,0 +1,65 @@
+/* General styles for browser view */
+.container {
+  margin: 20px;
+}
+
+.display-version {
+  /* Styles for the display version on the browser */
+  
+}
+
+.print-version {
+  display: none; /* Hide the print version on the screen */
+}
+
+/* Print-specific styles */
+@media print {
+  body {
+      margin: 0;
+      padding: 0;
+  }
+
+  .display-version {
+      display: none; /* Hide display version during printing */
+  }
+
+  .print-version {
+      display: block; /* Show print version during printing */
+      padding-top: 10mm;
+      width: 120%;
+      margin-left: -15mm;
+  }
+
+  th, td {
+    border: none !important; /* Remove all borders */
+    padding: 10px !important; /* Optional: add some padding */
+    text-align: center !important;
+  }
+
+  th {
+    border-bottom: 1px solid black !important; /* Add a bottom border to the header */
+  }
+
+  .total-amount-row {
+    border-top: 1px solid black !important; /* Add a top border to the total amount row */
+  }
+
+  .total-amount-cell {
+    border-bottom: double black !important;
+    border-width: 0 0 4px 0 !important;
+    padding-bottom: 0px !important;   
+  }
+  
+  .footer-payment {
+    position: absolute; /* Position footer absolutely */
+    bottom: 0; /* Align it to the bottom */
+    left: 0; /* Align it to the left */
+    right: 0; /* Align it to the right */
+    margin-top: 20px; /* Add spacing above the footer */
+  }
+
+  header, footer, nav, .no-print {
+    display: none !important; /* Ensure headers/footers are not printed */
+  }
+  
+}

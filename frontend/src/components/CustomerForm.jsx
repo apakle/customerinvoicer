@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const CustomerForm = () => {
   const [customer, setCustomer] = useState({
@@ -46,16 +46,33 @@ const CustomerForm = () => {
   };
 
   return (
-    <div>
-      <h2>Create Customer</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="firstName" value={customer.firstName} onChange={handleChange} placeholder="First Name" />
-        <input type="text" name="lastName" value={customer.lastName} onChange={handleChange} placeholder="Last Name" />
-        <input type="text" name="street" value={customer.address.street} onChange={handleAddressChange} placeholder="Street" />
-        <input type="text" name="zip" value={customer.address.zip} onChange={handleAddressChange} placeholder="ZIP Code" />
-        <input type="text" name="city" value={customer.address.city} onChange={handleAddressChange} placeholder="City" />
-        <button type="submit">Create Customer</button>
-      </form>
+    <div className="card">
+      <div className="card-body">
+        <h2>Create Customer</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">First Name</label>
+            <input type="text" name="firstName" value={customer.firstName} onChange={handleChange} className="form-control" placeholder="First Name" required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Last Name</label>
+            <input type="text" name="lastName" value={customer.lastName} onChange={handleChange} className="form-control" placeholder="Last Name" required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Street</label>
+            <input type="text" name="street" value={customer.address.street} onChange={handleAddressChange} className="form-control" placeholder="Street" required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">ZIP Code</label>
+            <input type="text" name="zip" value={customer.address.zip} onChange={handleAddressChange} className="form-control" placeholder="ZIP Code" required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">City</label>
+            <input type="text" name="city" value={customer.address.city} onChange={handleAddressChange} className="form-control" placeholder="City" required />
+          </div>
+          <button type="submit" className="btn btn-primary">Create Customer</button>
+        </form>
+      </div>
     </div>
   );
 };

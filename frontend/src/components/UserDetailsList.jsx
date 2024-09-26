@@ -6,7 +6,6 @@ const UserDetailsList = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the user details when the component mounts
     axios.get('http://localhost:8080/api/userdetails')
       .then(response => {
         setUserDetails(response.data);
@@ -23,18 +22,20 @@ const UserDetailsList = () => {
   }
 
   return (
-    <div>
+    <div className="container mt-5">
       <h2>User Details</h2>
-      <ul>
+      <div className="list-group">
         {userDetails.map((user) => (
-          <li key={user.id}>
-            <strong>{user.name}</strong><br />
-            Address: {user.address.street}, {user.address.zip} {user.address.city}<br />
-            Phone: {user.phone}<br />
-            Bank Account: {user.bankAccount}
-          </li>
+          <div key={user.id} className="list-group-item">
+            <h5>{user.name}</h5>
+            <p>
+              <strong>Address:</strong> {user.address.street}, {user.address.zip} {user.address.city}<br />
+              <strong>Phone:</strong> {user.phoneNumber}<br />
+              <strong>Bank Account:</strong> {user.bankAccount}
+            </p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

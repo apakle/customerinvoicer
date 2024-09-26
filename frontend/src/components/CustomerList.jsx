@@ -11,15 +11,34 @@ const CustomerList = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Customer List</h2>
-      <ul>
-        {customers.map(customer => (
-          <li key={customer.id}>
-            {customer.firstName} {customer.lastName}, {customer.address.street}, {customer.address.zip} {customer.address.city}
-          </li>
-        ))}
-      </ul>
+    <div className="card">
+      <div className="card-header">
+        <h2>Customer List</h2>
+      </div>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Street</th>
+              <th>ZIP</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            {customers.map(customer => (
+              <tr key={customer.id}>
+                <td>{customer.firstName}</td>
+                <td>{customer.lastName}</td>
+                <td>{customer.address.street}</td>
+                <td>{customer.address.zip}</td>
+                <td>{customer.address.city}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

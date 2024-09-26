@@ -12,7 +12,9 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	private String invoiceNumber;
-    private Date date;
+    private Date invoiceDate;
+    private Date serviceDate;
+    private String description;
     
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvoicePosition> positions = new ArrayList<>();
@@ -25,9 +27,9 @@ public class Invoice {
     
     Invoice() {}
 
-    public Invoice(String invoiceNumber, Date date) {
+    public Invoice(String invoiceNumber, Date invoiceDate) {
         this.invoiceNumber = invoiceNumber;
-        this.date = date;
+        this.invoiceDate = invoiceDate;
     }
 
     public void addPosition(InvoicePosition position) {
@@ -55,12 +57,12 @@ public class Invoice {
 		this.invoiceNumber = invoiceNumber;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getInvoiceDate() {
+		return invoiceDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
 	}
 
 	public List<InvoicePosition> getPositions() {
@@ -87,4 +89,21 @@ public class Invoice {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Date getServiceDate() {
+		return serviceDate;
+	}
+
+	public void setServiceDate(Date serviceDate) {
+		this.serviceDate = serviceDate;
+	}
+	
 }
