@@ -59,7 +59,8 @@ const InvoiceDetails = () => {
                     <p><strong>Rechnung Nr.:</strong> {invoice.invoiceNumber}</p>
                 </div>
                 <div className="col-auto text-end">
-                    <p><strong>Rechnungsdatum:</strong> {new Date(invoice.invoiceDate).toLocaleDateString()}</p>
+                    <div><strong>Rechnungsdatum:</strong> {new Date(invoice.invoiceDate).toLocaleDateString()}</div>
+                    <div><strong>Leistungsdatum:</strong> {new Date(invoice.serviceDate).toLocaleDateString()}</div>
                 </div>
             </div>
             <p className="mt-3 mb-4"><strong>Leistungsbeschreibung:</strong> {invoice.description}</p>
@@ -136,7 +137,7 @@ const InvoiceDetails = () => {
                 <p>Wehr, den {new Date(invoice.invoiceDate).toLocaleDateString()}</p>
             </div>
             <p className="mt-4"><strong>Rechnung Nr.:</strong> {invoice.invoiceNumber}</p>
-            <p className="mt-5">Für ihren Auftrag bedanke ich mich und berechne für meine Leistungen am</p>
+            <p className="mt-5">Für ihren Auftrag bedanke ich mich und berechne für meine Leistungen am {new Date(invoice.serviceDate).toLocaleDateString()}:</p>
 
             <table className="table mt-5" style={{ fontSize: '0.9rem' }}>
                 <thead>
