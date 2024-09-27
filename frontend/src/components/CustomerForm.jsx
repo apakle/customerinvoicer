@@ -49,40 +49,40 @@ const CustomerForm = () => {
   return (
     <div className="card">
       <div className="card-header">
-        <h2>Create Customer</h2>
+        <h2>Neuen Kunden anlegen</h2>
       </div>
       <div className="card-body">        
         <form onSubmit={handleSubmit}>
           <div className="row mb-3">
             <div className="col-md-6">
-              <label className="form-label">First Name</label>
-              <input type="text" name="firstName" value={customer.firstName} onChange={handleChange} className="form-control" placeholder="First Name" required />
+              <label className="form-label">Vorname</label>
+              <input type="text" name="firstName" value={customer.firstName} onChange={handleChange} className="form-control" placeholder="Vorname" required />
             </div>
             <div className="col-md-6">
-              <label className="form-label">Last Name</label>
-              <input type="text" name="lastName" value={customer.lastName} onChange={handleChange} className="form-control" placeholder="Last Name" required />
+              <label className="form-label">Nachname</label>
+              <input type="text" name="lastName" value={customer.lastName} onChange={handleChange} className="form-control" placeholder="Nachname" required />
             </div>
           </div>
 
           <div className="row mb-3">
             <div className="col-12">
-              <label className="form-label">Street</label>
-              <input type="text" name="street" value={customer.address.street} onChange={handleAddressChange} className="form-control" placeholder="Street" required />
+              <label className="form-label">Straße</label>
+              <input type="text" name="street" value={customer.address.street} onChange={handleAddressChange} className="form-control" placeholder="Straße" required />
             </div>
           </div>
 
           <div className="row mb-3">
             <div className="col-md-6">
-              <label className="form-label">ZIP Code</label>
-              <input type="text" name="zip" value={customer.address.zip} onChange={handleAddressChange} className="form-control" placeholder="ZIP Code" required />
+              <label className="form-label">Postleitzahl</label>
+              <input type="text" name="zip" value={customer.address.zip} onChange={handleAddressChange} className="form-control" placeholder="PLZ" required />
             </div>
             <div className="col-md-6">
-              <label className="form-label">City</label>
-              <input type="text" name="city" value={customer.address.city} onChange={handleAddressChange} className="form-control" placeholder="City" required />
+              <label className="form-label">Stadt</label>
+              <input type="text" name="city" value={customer.address.city} onChange={handleAddressChange} className="form-control" placeholder="Stadt" required />
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary">Create Customer</button>
+          <button type="submit" className="btn btn-primary">Erstelle Kunde</button>
         </form>
       </div>
     </div>

@@ -73,16 +73,16 @@ const InvoiceForm = () => {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-header">
-                    <h2>Create Invoice</h2>
+                    <h2>Rechnung erstellen</h2>
                 </div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit} className="mt-3">
                         {/* Customer and Date Fields */}
                         <div className="row g-3 mb-3">
                             <div className="col-md-4 col-12">
-                                <label htmlFor="customer" className="form-label">Customer:</label>
+                                <label htmlFor="customer" className="form-label">Kunde:</label>
                                 <select id="customer" value={selectedCustomer} onChange={handleCustomerChange} className="form-select w-100" required>
-                                    <option value="">Select a customer</option>
+                                    <option value="">Wähle einen Kunden</option>
                                     {customers.map(customer => (
                                         <option key={customer.id} value={customer.id}>
                                             {customer.firstName} {customer.lastName}
@@ -131,16 +131,16 @@ const InvoiceForm = () => {
                         
                         {/* Positions Table */}
                         <div className="mb-3">
-                            <h3>Positions</h3>
+                            <h3>Positionen</h3>
                             <div className="table-responsive">
                                 <table className="table">
                                     <thead>
                                         <tr>
                                             <th>Position</th>
-                                            <th>Quantity</th>
-                                            <th>Description</th>
-                                            <th>Price</th>
-                                            <th>Action</th>
+                                            <th>Menge</th>
+                                            <th>Beschreibung</th>
+                                            <th>Preis</th>
+                                            <th>Aktion</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -154,7 +154,7 @@ const InvoiceForm = () => {
                                                         value={position.quantity}
                                                         onChange={(e) => handlePositionChange(index, e)}
                                                         className="form-control"
-                                                        placeholder="Quantity"
+                                                        placeholder="Menge"
                                                         min="1"
                                                         required
                                                     />
@@ -166,7 +166,7 @@ const InvoiceForm = () => {
                                                         value={position.description}
                                                         onChange={(e) => handlePositionChange(index, e)}
                                                         className="form-control"
-                                                        placeholder="Description"
+                                                        placeholder="Beschreibung"
                                                         required
                                                     />
                                                 </td>
@@ -177,25 +177,25 @@ const InvoiceForm = () => {
                                                         value={position.price}
                                                         onChange={(e) => handlePositionChange(index, e)}
                                                         className="form-control"
-                                                        placeholder="Price"
+                                                        placeholder="Preis"
                                                         min="0"
                                                         step="0.01"
                                                         required
                                                     />
                                                 </td>
                                                 <td>
-                                                    <button type="button" className="btn btn-danger" onClick={() => removePosition(index)}>Remove</button>
+                                                    <button type="button" className="btn btn-danger" onClick={() => removePosition(index)}>Entfernen</button>
                                                 </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
-                            <button type="button" className="btn btn-success" onClick={addPosition}>Add Position</button>
+                            <button type="button" className="btn btn-success" onClick={addPosition}>Position hinzufügen</button>
                         </div>
 
                         {/* Submit Button */}
-                        <button type="submit" className="btn btn-primary">Create Invoice</button>
+                        <button type="submit" className="btn btn-primary">Rechnung erstellen</button>
                     </form>
                 </div>
             </div>

@@ -108,7 +108,7 @@ const InvoiceDetails = () => {
 
                     <div className="row mt-3">
                         <div className="col text-center">
-                            <button className="btn btn-primary" onClick={handlePrint}>Print Invoice</button>
+                            <button className="btn btn-primary" onClick={handlePrint}>Rechnung drucken</button>
                         </div>
                     </div>
                 </div>
