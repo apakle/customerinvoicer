@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InvoiceService {
@@ -30,15 +31,30 @@ public class InvoiceService {
     public Invoice getInvoiceById(Long id) {
         return invoiceRepository.findById(id).orElse(null);
     }
+    
+    public Invoice updateInvoice(Long id, Invoice invoice) {
+    	Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
+    	if (existingInvoice.isPresent()) {
+    		Invoice updatedInvoice = existingInvoice.get();
+    		updatedInvoice.setInvoiceDate(invoice.getInvoiceDate());
+    		updatedInvoice.setServiceDate(invoice.getServiceDate());
+    		updatedInvoice.setDescription(invoice.getDescription());
+//    		updatedInvoice.setPositions(invoice.getPositions());
+    		updatedInvoice.setCustomer(invoice.getCustomer());
+    		return invoiceRepository.save(updatedInvoice);
+    	} else {
+            throw new RuntimeException("Invoice not found with id: " + id);
+        }
+    }
 
     public void deleteInvoice(Long id) {
         invoiceRepository.deleteById(id);
     }
     
-	// Fetch invoices by year
-    public List<Invoice> getInvoicesByYear(int year) {
-        return invoiceRepository.findInvoicesByYear(year);
-    }
+//	// Fetch invoices by year
+//    public List<Invoice> getInvoicesByYear(int year) {
+//        return invoiceRepository.findInvoicesByYear(year);
+//    }
     
     // Generate the invoice number in the format "YY/N"
     private String generateInvoiceNumber(Invoice invoice) {

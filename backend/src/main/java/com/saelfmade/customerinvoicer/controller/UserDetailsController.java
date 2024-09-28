@@ -24,5 +24,19 @@ public class UserDetailsController {
     public UserDetails createUserDetails(@RequestBody UserDetails userDetails) {
         return userDetailsService.saveUserDetails(userDetails);
     }
+    
+    @GetMapping("/{id}")
+    public UserDetails getUserDetailsById(@PathVariable Long id) {
+        return userDetailsService.getUserDetailsById(id);
+    }
+    
+    @PutMapping("/{id}")
+    public UserDetails updateUserDetails(@PathVariable Long id, @RequestBody UserDetails userDetails) {
+        return userDetailsService.updateUserDetails(id, userDetails);
+    }
 
+    @DeleteMapping("/{id}")
+    public void deleteUserDetails(@PathVariable Long id) {
+        userDetailsService.deleteUserDetails(id);
+    }
 }

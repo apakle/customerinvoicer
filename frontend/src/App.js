@@ -6,6 +6,7 @@ import InvoiceList from './components/InvoiceList';
 import InvoiceForm from './components/InvoiceForm';
 import InvoiceDetails from './components/InvoiceDetails';
 import UserDetailsList from './components/UserDetailsList';
+import UserDetailsForm from './components/UserDetailsForm';
 
 function Footer() {
   return (
@@ -58,10 +59,13 @@ function App() {
         <Routes>
           <Route path="/customers" element={<CustomerList />} />
           <Route path="/create-customer" element={<CustomerForm />} />
+          <Route path="/customers/:id/edit" element={<CustomerForm />} />
           <Route path="/invoices" element={<InvoiceList />} />
           <Route path="/create-invoice" element={<InvoiceForm />} />
           <Route path="/invoices/:id" element={<InvoiceDetails />} />
           <Route path="/userdetails" element={<UserDetailsList />} />
+          <Route path="/create-user" element={<UserDetailsForm />} />
+          <Route path="/userdetails/:id/edit" element={<UserDetailsForm />} />
         </Routes>
       </div>
 

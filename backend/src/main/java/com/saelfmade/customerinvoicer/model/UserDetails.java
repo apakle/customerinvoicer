@@ -14,19 +14,25 @@ public class UserDetails {
     private Address address;
     
     private String phoneNumber;
-    private String bankAccount;
+    private String iban;
+    private String bank;
+    private String bic;
     private String taxNumber;
 
     public UserDetails() {}
+    
+    public UserDetails(String name, Address address, String phoneNumber, String iban, String bank, String bic,
+			String taxNumber) {
+		this.name = name;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.iban = iban;
+		this.bank = bank;
+		this.bic = bic;
+		this.taxNumber = taxNumber;
+	}
 
-    public UserDetails(String name, Address address, String phoneNumber, String bankAccount) {
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.bankAccount = bankAccount;
-    }
-
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
@@ -58,13 +64,29 @@ public class UserDetails {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getBankAccount() {
-        return bankAccount;
+    public String getIban() {
+        return iban;
     }
 
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
+    public void setIban(String iban) {
+        this.iban = iban;
     }
+
+	public String getBank() {
+		return bank;
+	}
+
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+
+	public String getBic() {
+		return bic;
+	}
+
+	public void setBic(String bic) {
+		this.bic = bic;
+	}
 
 	public String getTaxNumber() {
 		return taxNumber;

@@ -32,9 +32,8 @@ const InvoiceDetails = () => {
     };
 
     const formatIBAN = (iban) => {
-        return iban ? iban.replace(/(.{4})/g, '$1 ').trim() : ''; 
+        return iban ? iban.replace(/\s+/g, '').replace(/(.{4})/g, '$1 ').trim() : ''; 
     };
-    const formattedIban = formatIBAN(users[0]?.bankAccount);
 
     // Display version for the screen
     const DisplayVersion = () => (
@@ -44,15 +43,13 @@ const InvoiceDetails = () => {
                     <Link to={'/invoices'} className="btn btn-link"> Zurück zu allen Rechnungen</Link>
                 </div>      
                 <div className="card-body">  
-                <h3 className="text-center">Rechnung {invoice.invoiceNumber}</h3>          
-                    <div className="row mt-4">
-                        <div className="col-6">
-                            <div><strong>Kunde:</strong></div>
-                            <div>{invoice.customer.firstName} {invoice.customer.lastName}</div>
-                            <div>{invoice.customer.address.street}</div>
-                            <div>{invoice.customer.address.zip} {invoice.customer.address.city}</div>
-                        </div>
-                    </div>
+                    <h3 className="text-center">Rechnung {invoice.invoiceNumber}</h3>                              
+                    <div className="col-12 mt-4">
+                        <div><strong>Kunde:</strong></div>
+                        <div>{invoice.customer.firstName} {invoice.customer.lastName}</div>
+                        <div>{invoice.customer.address.street}</div>
+                        <div>{invoice.customer.address.zip} {invoice.customer.address.city}</div>
+                    </div>                    
                     {/* Row for Invoice Number and Date */}
                     <div className="row mt-3 justify-content-between">
                         <div className="col-auto">
@@ -101,8 +98,8 @@ const InvoiceDetails = () => {
                             <p><u><strong> Zahlbar innerhalb 10 Tagen ohne Abzug</strong></u></p>
                         </div>
                         <div className="col-6 mt-5">
-                            <div><strong>IBAN:</strong> {formattedIban}</div>
-                            <div><strong>Bankverbindung:</strong> Volksbank Rhein-Wehra eG, <strong>BIC:</strong> GENODE61BSK</div>
+                            <div><strong>IBAN:</strong> {formatIBAN(users[0]?.iban)}</div>
+                            <div><strong>Bankverbindung:</strong> {users[0]?.bank}, <strong>BIC:</strong> {users[0]?.bic}</div>
                         </div>
                     </div>
 
@@ -186,8 +183,8 @@ const InvoiceDetails = () => {
                 <div className="footer-payment ms-5">
                     <p className="mt-5"><u><strong> Zahlbar innerhalb 10 Tagen ohne Abzug</strong></u></p>
                     <div className="ms-5" style={{ fontSize: '0.9rem' }}>
-                        <div><strong>IBAN:</strong> {formattedIban}</div>
-                        <div><strong>Bankverbindung:</strong> Volksbank Rhein-Wehra eG, <strong>BIC:</strong> GENODE61BSK</div>
+                        <div><strong>IBAN:</strong> {formatIBAN(users[0]?.iban)}</div>
+                        <div><strong>Bankverbindung:</strong> {users[0]?.bank}, <strong>BIC:</strong> {users[0]?.bic}</div>
                     </div> 
                 </div>               
             </div>

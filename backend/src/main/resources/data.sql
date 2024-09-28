@@ -19,5 +19,5 @@ INSERT INTO invoice_position (position, quantity, description, price, total_pric
 (2, 1, 'Gadget Y', 49.0, 49.0, 2);
 
 -- Insert sample data into the UserDetails table
-INSERT INTO user_details (name, street, zip, city, phone_number, bank_account, tax_number) VALUES
-('Al Bundy', '123 Main St', '79664', 'Wehr', '123-456-7890', 'DE89370400440532013000', '16163/25108');
+INSERT INTO user_details (name, street, zip, city, phone_number, iban, bank, bic, tax_number) VALUES
+('Al Bundy', '123 Main St', '79664', 'Wehr', '123-456-7890', 'DE89370400440532013000', 'Volksbank Rhein-Wehra eG', 'GENODE61BSK', '16163/25108');

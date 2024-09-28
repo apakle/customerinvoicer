@@ -46,14 +46,19 @@ public class InvoiceController {
     public Invoice getInvoice(@PathVariable Long id) {
         return invoiceService.getInvoiceById(id);
     }
+    
+    @PutMapping("/{id}")
+    public Invoice updateInvoice(@PathVariable Long id, @RequestBody Invoice invoice) {
+    	return invoiceService.updateInvoice(id, invoice);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteInvoice(@PathVariable Long id) {
         invoiceService.deleteInvoice(id);
     }
     
-    @GetMapping("/year/{year}")
-    public List<Invoice> getInvoicesByYear(@PathVariable int year) {
-        return invoiceService.getInvoicesByYear(year);
-    }
+//    @GetMapping("/year/{year}")
+//    public List<Invoice> getInvoicesByYear(@PathVariable int year) {
+//        return invoiceService.getInvoicesByYear(year);
+//    }
 }

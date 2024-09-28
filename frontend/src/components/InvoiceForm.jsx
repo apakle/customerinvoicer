@@ -70,134 +70,132 @@ const InvoiceForm = () => {
     };
 
     return (
-        <div className="container mt-4">
-            <div className="card">
-                <div className="card-header">
-                    <h2>Rechnung erstellen</h2>
-                </div>
-                <div className="card-body">
-                    <form onSubmit={handleSubmit} className="mt-3">
-                        {/* Customer and Date Fields */}
-                        <div className="row g-3 mb-3">
-                            <div className="col-md-4 col-12">
-                                <label htmlFor="customer" className="form-label">Kunde:</label>
-                                <select id="customer" value={selectedCustomer} onChange={handleCustomerChange} className="form-select w-100" required>
-                                    <option value="">Wähle einen Kunden</option>
-                                    {customers.map(customer => (
-                                        <option key={customer.id} value={customer.id}>
-                                            {customer.firstName} {customer.lastName}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="col-md-4 col-12">
-                                <label htmlFor="invoiceDate" className="form-label">Rechnungsdatum:</label>
-                                <input
-                                    type="date"
-                                    id="invoiceDate"
-                                    name="invoiceDate"
-                                    value={invoice.invoiceDate}
-                                    onChange={handleInvoiceChange}
-                                    className="form-control w-100"
-                                    required
-                                />
-                            </div>
-                            <div className="col-md-4 col-12">
-                                <label htmlFor="serviceDate" className="form-label">Leistungsdatum:</label>
-                                <input
-                                    type="date"
-                                    id="serviceDate"
-                                    name="serviceDate"
-                                    value={invoice.serviceDate}
-                                    onChange={handleInvoiceChange}
-                                    className="form-control w-100"
-                                    required
-                                />
-                            </div>
+        <div className="card">
+            <div className="card-header">
+                <h2>Rechnung erstellen</h2>
+            </div>
+            <div className="card-body">
+                <form onSubmit={handleSubmit} className="mt-3">
+                    {/* Customer and Date Fields */}
+                    <div className="row g-3 mb-3">
+                        <div className="col-md-4 col-12">
+                            <label htmlFor="customer" className="form-label">Kunde:</label>
+                            <select id="customer" value={selectedCustomer} onChange={handleCustomerChange} className="form-select w-100" required>
+                                <option value="">Wähle einen Kunden</option>
+                                {customers.map(customer => (
+                                    <option key={customer.id} value={customer.id}>
+                                        {customer.firstName} {customer.lastName}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-                        
-                        {/* Description */}
-                        <div className="mb-3">
-                            <label htmlFor="description" className="form-label">Leistungsbeschreibung:</label>
-                            <textarea
-                                id="description"
-                                name="description"
-                                value={invoice.description}
+                        <div className="col-md-4 col-12">
+                            <label htmlFor="invoiceDate" className="form-label">Rechnungsdatum:</label>
+                            <input
+                                type="date"
+                                id="invoiceDate"
+                                name="invoiceDate"
+                                value={invoice.invoiceDate}
                                 onChange={handleInvoiceChange}
-                                className="form-control"
-                                placeholder="Hier kann eine zusätzliche Beschreibung hinzugefügt werden"
+                                className="form-control w-100"
+                                required
                             />
                         </div>
-                        
-                        {/* Positions Table */}
-                        <div className="mb-3">
-                            <h3>Positionen</h3>
-                            <div className="table-responsive">
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Position</th>
-                                            <th>Menge</th>
-                                            <th>Beschreibung</th>
-                                            <th>Preis</th>
-                                            <th>Aktion</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {positions.map((position, index) => (
-                                            <tr key={index}>
-                                                <td>{position.position}</td>
-                                                <td>
-                                                    <input
-                                                        type="number"
-                                                        name="quantity"
-                                                        value={position.quantity}
-                                                        onChange={(e) => handlePositionChange(index, e)}
-                                                        className="form-control"
-                                                        placeholder="Menge"
-                                                        min="1"
-                                                        required
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="text"
-                                                        name="description"
-                                                        value={position.description}
-                                                        onChange={(e) => handlePositionChange(index, e)}
-                                                        className="form-control"
-                                                        placeholder="Beschreibung"
-                                                        required
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="number"
-                                                        name="price"
-                                                        value={position.price}
-                                                        onChange={(e) => handlePositionChange(index, e)}
-                                                        className="form-control"
-                                                        placeholder="Preis"
-                                                        min="0"
-                                                        step="0.01"
-                                                        required
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <button type="button" className="btn btn-danger" onClick={() => removePosition(index)}>Entfernen</button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <button type="button" className="btn btn-success" onClick={addPosition}>Position hinzufügen</button>
+                        <div className="col-md-4 col-12">
+                            <label htmlFor="serviceDate" className="form-label">Leistungsdatum:</label>
+                            <input
+                                type="date"
+                                id="serviceDate"
+                                name="serviceDate"
+                                value={invoice.serviceDate}
+                                onChange={handleInvoiceChange}
+                                className="form-control w-100"
+                                required
+                            />
                         </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <div className="mb-3">
+                        <label htmlFor="description" className="form-label">Leistungsbeschreibung:</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            value={invoice.description}
+                            onChange={handleInvoiceChange}
+                            className="form-control"
+                            placeholder="Hier kann eine zusätzliche Beschreibung hinzugefügt werden"
+                        />
+                    </div>
+                    
+                    {/* Positions Table */}
+                    <div className="mb-3">
+                        <h3>Positionen</h3>
+                        <div className="table-responsive">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Position</th>
+                                        <th>Menge</th>
+                                        <th>Beschreibung</th>
+                                        <th>Preis</th>
+                                        <th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {positions.map((position, index) => (
+                                        <tr key={index}>
+                                            <td>{position.position}</td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    name="quantity"
+                                                    value={position.quantity}
+                                                    onChange={(e) => handlePositionChange(index, e)}
+                                                    className="form-control"
+                                                    placeholder="Menge"
+                                                    min="1"
+                                                    required
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    name="description"
+                                                    value={position.description}
+                                                    onChange={(e) => handlePositionChange(index, e)}
+                                                    className="form-control"
+                                                    placeholder="Beschreibung"
+                                                    required
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    name="price"
+                                                    value={position.price}
+                                                    onChange={(e) => handlePositionChange(index, e)}
+                                                    className="form-control"
+                                                    placeholder="Preis"
+                                                    min="0"
+                                                    step="0.01"
+                                                    required
+                                                />
+                                            </td>
+                                            <td>
+                                                <button type="button" className="btn btn-danger" onClick={() => removePosition(index)}>Entfernen</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" className="btn btn-success" onClick={addPosition}>Position hinzufügen</button>
+                    </div>
 
-                        {/* Submit Button */}
-                        <button type="submit" className="btn btn-primary">Rechnung erstellen</button>
-                    </form>
-                </div>
+                    {/* Submit Button */}
+                    <button type="submit" className="btn btn-primary">Rechnung erstellen</button>
+                </form>
             </div>
         </div>
     );

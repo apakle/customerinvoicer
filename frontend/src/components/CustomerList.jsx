@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CustomerList = () => {
@@ -6,6 +7,8 @@ const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
   const [sortColumn, setSortColumn] = useState('lastName');
   const [sortDirection, setSortDirection] = useState('asc');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`${backendUrl}/api/customers`)
@@ -38,6 +41,24 @@ const CustomerList = () => {
     return 0;
   });
 
+  const handleUpdate = (id) => {
+    navigate(`/customers/${id}/edit`);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this customer?')) {
+      axios.delete(`${backendUrl}/api/customers/${id}`)
+        .then(response => {
+          console.log('Customer deleted:', response.status);
+          setCustomers(prevDetails => prevDetails.filter(customer => customer.id !== id)); // Remove deleted customer from state
+        })
+        .catch(error => {
+          console.error('Error deleting customer:', error);
+          alert('Error deleting customer. Please try again.');
+        });
+    }
+  };  
+
   return (
     <div className="card">
       <div className="card-header">
@@ -62,6 +83,7 @@ const CustomerList = () => {
               <th onClick={() => handleSort('city')}>
                 Stadt {sortColumn === 'city' && (sortDirection === 'asc' ? '▲' : '▼')}
               </th>
+              <th>Aktion</th>
             </tr>
           </thead>
           <tbody>
@@ -72,6 +94,10 @@ const CustomerList = () => {
                 <td>{customer.address.street}</td>
                 <td>{customer.address.zip}</td>
                 <td>{customer.address.city}</td>
+                <td className="d-grid gap-1 d-lg-flex">
+                  <button onClick={() => handleUpdate(customer.id)} className="btn btn-info">Updaten</button>
+                  <button onClick={() => handleDelete(customer.id)} className="btn btn-danger">Löschen</button>
+                </td>
               </tr>
             ))}
           </tbody>

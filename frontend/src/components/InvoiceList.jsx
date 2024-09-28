@@ -93,6 +93,12 @@ const InvoiceList = () => {
     return 0;
   });
 
+  // Reset filters function
+  const resetFilters = () => {
+    setSelectedYear('all');
+    setSelectedCustomer('all');
+  };
+
   return (
     <div className="card">
       <div className="card-header">
@@ -128,6 +134,7 @@ const InvoiceList = () => {
               ))}
             </select>
           </div>
+          <button onClick={resetFilters} className="btn btn-secondary align-self-end">Zurücksetzen</button>
         </div>
         <div className="table-responsive">
           <table className="table">
