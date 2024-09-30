@@ -27,9 +27,12 @@ public class Invoice {
     
     Invoice() {}
 
-    public Invoice(String invoiceNumber, Date invoiceDate) {
+    public Invoice(String invoiceNumber, Date invoiceDate, Date serviceDate, double totalAmount, Customer customer) {
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
+        this.serviceDate = serviceDate;
+        this.totalAmount=totalAmount;
+        this.customer = customer;
     }
 
     public void addPosition(InvoicePosition position) {
@@ -98,6 +101,7 @@ public class Invoice {
 		this.description = description;
 	}
 
+
 	public Date getServiceDate() {
 		return serviceDate;
 	}
@@ -106,4 +110,10 @@ public class Invoice {
 		this.serviceDate = serviceDate;
 	}
 	
+	@Override
+	public String toString() {
+		return "Invoice [id=" + id + ", invoiceNumber=" + invoiceNumber + ", invoiceDate=" + invoiceDate
+				+ ", serviceDate=" + serviceDate + ", description=" + description + ", positions=" + positions
+				+ ", customer=" + customer + ", totalAmount=" + totalAmount + "]";
+	}	
 }

@@ -72,7 +72,7 @@ const UserDetailsList = () => {
               <strong>Bank:</strong> {user.bank}<br />
               <strong>St.Nr.:</strong> {user.taxNumber}
             </p>
-            <button onClick={() => handleUpdate(user.id)} className="btn btn-info me-2">Updaten</button>
+            <button onClick={() => handleUpdate(user.id)} className="btn btn-primary me-2">Updaten</button>
             <button onClick={() => handleDelete(user.id)} className="btn btn-danger">Löschen</button>
           </div>
         ))}

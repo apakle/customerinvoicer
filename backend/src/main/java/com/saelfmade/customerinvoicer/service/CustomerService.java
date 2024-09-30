@@ -28,7 +28,7 @@ public class CustomerService {
     
     public Customer updateCustomer(Long id, Customer customer) {
     	Optional<Customer> existingCustomer = customerRepository.findById(id);
-    	if (existingCustomer.isPresent() ) {
+    	if (existingCustomer.isPresent()) {
     		Customer updatedCustomer = existingCustomer.get();
     		updatedCustomer.setFirstName(customer.getFirstName());
     		updatedCustomer.setLastName(customer.getLastName());
