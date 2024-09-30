@@ -63,7 +63,11 @@ function App() {
           <Route path="/invoices" element={<InvoiceList />} />
           <Route path="/create-invoice" element={<InvoiceForm />} />
           <Route path="/invoices/:id" element={<InvoiceDetails />} />
+<<<<<<< HEAD
           <Route path="/invoices/:id/edit" element={<InvoiceForm />} />
+=======
+          <Route path="/invoices/:invoiceId/edit" element={<InvoiceForm />} />
+>>>>>>> 2b37d1753bfdda30e9f1d4e2bf948f8e4fe6f388
           <Route path="/userdetails" element={<UserDetailsList />} />
           <Route path="/create-user" element={<UserDetailsForm />} />
           <Route path="/userdetails/:id/edit" element={<UserDetailsForm />} />

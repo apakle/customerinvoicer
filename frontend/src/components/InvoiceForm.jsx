@@ -3,14 +3,18 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const InvoiceForm = () => {
+    const { invoiceId } = useParams(); // Get invoiceId from the route if it exists
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const { id } = useParams(); // Get customer ID from URL 
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState('');
     const [positions, setPositions] = useState([{ position: 1, quantity: '', description: '', price: '' }]);
     const [invoice, setInvoice] = useState({ invoiceDate: new Date().toISOString().split('T')[0], serviceDate: '', description: '', positions: [] });
+<<<<<<< HEAD
     
     const [isEdit, setIsEdit] = useState(false); // Track if it's edit mode
+=======
+>>>>>>> 2b37d1753bfdda30e9f1d4e2bf948f8e4fe6f388
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,7 +22,24 @@ const InvoiceForm = () => {
         axios.get(`${backendUrl}/api/customers`)
             .then(response => setCustomers(response.data))
             .catch(error => console.error('Error fetching customers:', error));
-    }, [backendUrl]);
+
+        // If invoiceId is present, fetch the existing invoice data
+        if (invoiceId) {
+            axios.get(`${backendUrl}/api/invoices/${invoiceId}`)
+                .then(response => {
+                    const invoiceData = response.data;
+                    setInvoice({
+                        invoiceDate: invoiceData.invoiceDate,
+                        serviceDate: invoiceData.serviceDate,
+                        description: invoiceData.description,
+                        positions: invoiceData.positions.map((pos, idx) => ({ ...pos, position: idx + 1 }))
+                    });
+                    setSelectedCustomer(invoiceData.customer.id); // Set the selected customer
+                    setPositions(invoiceData.positions.map((pos, idx) => ({ ...pos, position: idx + 1 })));
+                })
+                .catch(error => console.error('Error fetching invoice:', error));
+        }
+    }, [backendUrl, invoiceId]);
 
     useEffect(() => {
         if (id) {
@@ -91,19 +112,32 @@ const InvoiceForm = () => {
             return;
         }
 
-        axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomer}`, { ...invoice, customerId: selectedCustomer })
-            .then(response => {
-                console.log('Invoice created:', response.data);
-                const createdInvoiceId = response.data.id;
-                navigate(`/invoices/${createdInvoiceId}`);
-            })
-            .catch(error => console.error('Error creating invoice:', error));
+        const invoiceData = { ...invoice, customerId: selectedCustomer };
+
+        if (invoiceId) {
+            // Update existing invoice (PUT request)
+            axios.put(`${backendUrl}/api/invoices/${invoiceId}`, invoiceData)
+                .then(response => {
+                    console.log('Invoice updated:', response.data);
+                    navigate(`/invoices/${invoiceId}`);
+                })
+                .catch(error => console.error('Error updating invoice:', error));
+        } else {
+            // Create new invoice (POST request)
+            axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomer}`, invoiceData)
+                .then(response => {
+                    console.log('Invoice created:', response.data);
+                    const createdInvoiceId = response.data.id;
+                    navigate(`/invoices/${createdInvoiceId}`);
+                })
+                .catch(error => console.error('Error creating invoice:', error));
+        }
     };
 
     return (
         <div className="card">
             <div className="card-header">
-                <h2>Rechnung erstellen</h2>
+                <h2>{invoiceId ? 'Rechnung bearbeiten' : 'Rechnung erstellen'}</h2>
             </div>
             <div className="card-body">
                 <form onSubmit={handleSubmit} className="mt-3">
@@ -225,7 +259,7 @@ const InvoiceForm = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <button type="submit" className="btn btn-primary">Rechnung erstellen</button>
+                    <button type="submit" className="btn btn-primary">{invoiceId ? 'Rechnung aktualisieren' : 'Rechnung erstellen'}</button>
                 </form>
             </div>
         </div>
