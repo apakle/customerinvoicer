@@ -1,4 +1,4 @@
-package com.saelfmade.customerinvoicer;
+package com.saelfmade.customerinvoicer.repository;
 
 import com.saelfmade.customerinvoicer.model.Address;
 import com.saelfmade.customerinvoicer.model.Customer;
