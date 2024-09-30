@@ -38,8 +38,4 @@ public class InvoiceRepositoryTest {
         // Verify that the invoice is saved
         assertThat(invoiceRepository.findById(invoice.getId())).isPresent();
     }
-
-
-
-
 }
