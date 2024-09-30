@@ -1,5 +1,8 @@
 package com.saelfmade.customerinvoicer.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -17,6 +20,7 @@ public class InvoicePosition {
     @ManyToOne
     @JoinColumn(name = "invoice_id")
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)  // Hibernate-specific annotation
     private Invoice invoice;
 
     InvoicePosition() {}

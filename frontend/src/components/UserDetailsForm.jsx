@@ -201,7 +201,7 @@ const UserDetailsForm = () => {
             </div>
           </div>
 
-          <button type="submit" className={id ? 'btn btn-info' : 'btn btn-primary'}>
+          <button type="submit" className='btn btn-primary'>
             {id ? 'Benutzer aktualisieren' : 'Erstelle Benutzer'}
           </button>
         </form>

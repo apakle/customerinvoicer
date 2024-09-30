@@ -95,7 +95,7 @@ const CustomerList = () => {
                 <td>{customer.address.zip}</td>
                 <td>{customer.address.city}</td>
                 <td className="d-grid gap-1 d-lg-flex">
-                  <button onClick={() => handleUpdate(customer.id)} className="btn btn-info">Updaten</button>
+                  <button onClick={() => handleUpdate(customer.id)} className="btn btn-primary">Updaten</button>
                   <button onClick={() => handleDelete(customer.id)} className="btn btn-danger">Löschen</button>
                 </td>
               </tr>
