@@ -44,7 +44,7 @@ const InvoiceForm = () => {
           // Reset the form if there's no ID
           setIsEdit(false);
           setInvoice({
-            invoiceDate: '', serviceDate: '', description: '', positions: []
+            invoiceDate: new Date().toISOString().split('T')[0], serviceDate: '', description: '', positions: []
           });
         }
       }, [id, backendUrl]);  
@@ -91,13 +91,18 @@ const InvoiceForm = () => {
             return;
         }
 
-        axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomer}`, { ...invoice, customerId: selectedCustomer })
-            .then(response => {
-                console.log('Invoice created:', response.data);
-                const createdInvoiceId = response.data.id;
-                navigate(`/invoices/${createdInvoiceId}`);
-            })
-            .catch(error => console.error('Error creating invoice:', error));
+        const request = isEdit
+      ? axios.put(`${backendUrl}/api/invoices/${id}`, invoice) // Update if in edit mode
+      : axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomer}`, { ...invoice, customerId: selectedCustomer }); // Create if not in edit mode
+
+      console.log('-------------', invoice.customer)
+
+      request.then(response => {
+        console.log(isEdit ? 'Invoice updated:' : 'Invoice created:', response.data);
+        const invoiceId = response.data.id;
+        navigate(`/invoices/${invoiceId}`);
+      })
+      .catch(error => console.error(error));
     };
 
     return (
