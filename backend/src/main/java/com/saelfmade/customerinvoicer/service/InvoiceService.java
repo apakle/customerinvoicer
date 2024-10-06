@@ -30,31 +30,28 @@ public class InvoiceService {
     }
 
     public Invoice getInvoiceById(Long id) {
-        return invoiceRepository.findById(id).orElse(null);
+        return invoiceRepository.findById(id)
+        		.orElseThrow(() -> new RuntimeException("Invoice not found with id: " + id));
     }
     
     public Invoice updateInvoice(Long id, Invoice updatedInvoice) {
         // Fetch the existing invoice
-        Optional<Invoice> existingInvoiceOpt = invoiceRepository.findById(id);
-        if (existingInvoiceOpt.isPresent()) {
-            Invoice existingInvoice = existingInvoiceOpt.get();
-            // Update all fields except the ID
-            existingInvoice.setInvoiceNumber(updatedInvoice.getInvoiceNumber());
-            existingInvoice.setInvoiceDate(updatedInvoice.getInvoiceDate());
-            existingInvoice.setServiceDate(updatedInvoice.getServiceDate());
-            existingInvoice.setDescription(updatedInvoice.getDescription());
-            existingInvoice.setCustomer(updatedInvoice.getCustomer());
-
-            // Update the positions: remove orphaned positions and add new ones
-            existingInvoice.getPositions().clear();
-            for (InvoicePosition position : updatedInvoice.getPositions()) {
-                existingInvoice.addPosition(position); // This will automatically recalculate the totalAmount
-            }
-            // Save the updated invoice
-            return invoiceRepository.save(existingInvoice);
-        } else {
-            throw new RuntimeException("Invoice not found with id: " + id);
+    	Invoice existingInvoice = getInvoiceById(id);    	
+    	// Update all fields except the ID
+        existingInvoice.setInvoiceNumber(updatedInvoice.getInvoiceNumber());
+        existingInvoice.setInvoiceDate(updatedInvoice.getInvoiceDate());
+        existingInvoice.setServiceDate(updatedInvoice.getServiceDate());
+        existingInvoice.setDescription(updatedInvoice.getDescription());
+        existingInvoice.setCustomer(updatedInvoice.getCustomer());
+        
+        // Update the positions: remove orphaned positions and add new ones
+        existingInvoice.getPositions().clear();
+        for (InvoicePosition position : updatedInvoice.getPositions()) {
+            existingInvoice.addPosition(position); // This will automatically recalculate the totalAmount
         }
+        
+        // Save the updated invoice
+        return invoiceRepository.save(existingInvoice);
     }
 
     public void deleteInvoice(Long id) {

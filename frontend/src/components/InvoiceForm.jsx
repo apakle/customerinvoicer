@@ -4,11 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const InvoiceForm = () => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    const { id } = useParams(); // Get customer ID from URL 
+    const { id } = useParams(); // Get invoice ID from URL 
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState('');
     const [positions, setPositions] = useState([{ position: 1, quantity: '', description: '', price: '' }]);
-    const [invoice, setInvoice] = useState({ invoiceDate: new Date().toISOString().split('T')[0], serviceDate: '', description: '', positions: [] });
+    const [invoice, setInvoice] = useState({ invoiceDate: '', serviceDate: '', description: '', positions: [] });
     
     const [isEdit, setIsEdit] = useState(false); // Track if it's edit mode
     const navigate = useNavigate();
@@ -28,16 +28,16 @@ const InvoiceForm = () => {
             //   setInvoice(response.data);
             setInvoice({ 
                 invoiceNumber: response.data.invoiceNumber,
-                invoiceDate: response.data.invoiceDate.split('T')[0], 
-                serviceDate: response.data.serviceDate.split('T')[0], 
+                invoiceDate: new Date(response.data.invoiceDate).toLocaleDateString('en-CA'), 
+                serviceDate: new Date(response.data.serviceDate).toLocaleDateString('en-CA'), 
                 description: response.data.description, 
                 positions: response.data.positions,
-                customer: response.data.customer.id
+                customer: response.data.customer
             })
               setSelectedCustomer(response.data.customer.id);
               setPositions(response.data.positions);
-              console.log("###########", invoice);
-            //   console.log("###########", response.data.invoiceDate.split('T')[0]);
+              console.log("###########", new Date(response.data.invoiceDate).toLocaleDateString('en-CA'));
+              console.log("###########", response.data);
             })
             .catch(error => console.error('Error fetching customer:', error));
         } else {
@@ -85,25 +85,31 @@ const InvoiceForm = () => {
             alert('Please select a customer.');
             return;
         }
-
+     
         if (positions.length === 0 || positions.some(position => !position.quantity || !position.description || !position.price)) {
             alert('Please add at least one valid position.');
             return;
         }
-
+     
+        const invoiceData = {
+            ...invoice,
+            customerId: selectedCustomer,  // Make sure customerId is explicitly included
+            positions,  // Include positions array
+        };
+     
+        console.log('Sending invoice data:', invoice);
+     
         const request = isEdit
-      ? axios.put(`${backendUrl}/api/invoices/${id}`, invoice) // Update if in edit mode
-      : axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomer}`, { ...invoice, customerId: selectedCustomer }); // Create if not in edit mode
-
-      console.log('-------------', invoice.customer)
-
-      request.then(response => {
-        console.log(isEdit ? 'Invoice updated:' : 'Invoice created:', response.data);
-        const invoiceId = response.data.id;
-        navigate(`/invoices/${invoiceId}`);
-      })
-      .catch(error => console.error(error));
-    };
+          ? axios.put(`${backendUrl}/api/invoices/${id}`, invoice)  // Update if in edit mode
+          : axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomer}`, invoiceData);  // Create if not in edit mode
+     
+        request.then(response => {
+          console.log(isEdit ? 'Invoice updated:' : 'Invoice created:', response.data);
+          const invoiceId = response.data.id;
+          navigate(`/invoices/${invoiceId}`);
+        })
+        .catch(error => console.error('Error:', error));
+     };     
 
     return (
         <div className="card">

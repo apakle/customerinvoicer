@@ -27,19 +27,13 @@ public class InvoiceController {
 
     @PostMapping("/customer/{customerId}")
     public Invoice createInvoice(@PathVariable Long customerId, @RequestBody Invoice invoice) {
-        Customer customer = customerService.getCustomerById(customerId);
-        if (customer != null) {
-            // Set the customer
-            invoice.setCustomer(customer);
-            
-            // Link each position to the invoice
-            invoice.getPositions().forEach(position -> position.setInvoice(invoice));
-            
-            // Save the invoice and return
-            return invoiceService.saveInvoice(invoice);
-        } else {
-            throw new RuntimeException("Customer not found");
-        }
+    	Customer customer = customerService.getCustomerById(customerId);    	
+    	// Use the bidirectional management to ensure both sides of the relationship are updated
+        customer.addInvoice(invoice); // Adds invoice to customer and sets customer on the invoice
+        // Link each position to the invoice
+        invoice.getPositions().forEach(position -> position.setInvoice(invoice));        
+        // Save the invoice via the service
+        return invoiceService.saveInvoice(invoice);
     }
 
     @GetMapping("/{id}")

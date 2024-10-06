@@ -25,6 +25,11 @@ public class Customer {
         this.lastName = lastName;
         this.address = address;
     }
+    
+    public void addInvoice(Invoice invoice) {
+        invoices.add(invoice);
+        invoice.setCustomer(this);
+    }
 
 	public Long getId() {
 		return id;

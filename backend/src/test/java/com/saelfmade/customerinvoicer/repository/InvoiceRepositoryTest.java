@@ -30,7 +30,7 @@ public class InvoiceRepositoryTest {
     public void testCreateInvoice() {
     	Address customerAddress = new Address("Schillerstr. 29", "79664", "Wehr");
     	Customer customer = new Customer("Christian", "Hoffelder", customerAddress);
-        Invoice invoice = new Invoice("INV-002", new Date(), new Date(), 150, customer);
+        Invoice invoice = new Invoice(new Date(), new Date(), 150, customer);
         invoiceRepository.save(invoice);
         
         System.out.println("Created Invoice ID: " + invoice.getId());

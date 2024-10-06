@@ -23,20 +23,16 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id).orElse(null);
+        return customerRepository.findById(id)
+        		.orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
     }
     
-    public Customer updateCustomer(Long id, Customer customer) {
-    	Optional<Customer> existingCustomer = customerRepository.findById(id);
-    	if (existingCustomer.isPresent()) {
-    		Customer updatedCustomer = existingCustomer.get();
-    		updatedCustomer.setFirstName(customer.getFirstName());
-    		updatedCustomer.setLastName(customer.getLastName());
-    		updatedCustomer.setAddress(customer.getAddress());    		
-    		return customerRepository.save(updatedCustomer);
-    	} else {
-            throw new RuntimeException("Customer not found with id: " + id);
-        }    	
+    public Customer updateCustomer(Long id, Customer updatedCustomer) {
+        Customer existingCustomer = getCustomerById(id);
+        existingCustomer.setFirstName(updatedCustomer.getFirstName());
+        existingCustomer.setLastName(updatedCustomer.getLastName());
+        existingCustomer.setAddress(updatedCustomer.getAddress());
+        return customerRepository.save(existingCustomer);
     }
 
     public void deleteCustomer(Long id) {

@@ -27,8 +27,7 @@ public class Invoice {
     
     Invoice() {}
 
-    public Invoice(String invoiceNumber, Date invoiceDate, Date serviceDate, double totalAmount, Customer customer) {
-        this.invoiceNumber = invoiceNumber;
+    public Invoice(Date invoiceDate, Date serviceDate, double totalAmount, Customer customer) {
         this.invoiceDate = invoiceDate;
         this.serviceDate = serviceDate;
         this.totalAmount=totalAmount;
