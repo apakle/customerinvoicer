@@ -1,12 +1,12 @@
 package com.saelfmade.customerinvoicer.service;
 
 import com.saelfmade.customerinvoicer.model.Customer;
+import com.saelfmade.customerinvoicer.model.Invoice;
 import com.saelfmade.customerinvoicer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -37,5 +37,15 @@ public class CustomerService {
 
     public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);
+    }
+    
+    public Customer addInvoiceToCustomer(Long id, Invoice invoice) {    	
+    	Customer customer = getCustomerById(id);    	
+    	// Use the bidirectional management to ensure both sides of the relationship are updated
+        customer.addInvoice(invoice); // Adds invoice to customer and sets customer on the invoice
+        // Link each position to the invoice
+        invoice.getPositions().forEach(position -> position.setInvoice(invoice));
+        
+        return customerRepository.save(customer);    	    	
     }
 }

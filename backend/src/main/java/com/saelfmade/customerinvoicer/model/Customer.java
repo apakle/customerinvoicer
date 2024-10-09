@@ -58,7 +58,11 @@ public class Customer {
 	public void setAddress(Address address) {
 		this.address = address;
 	}       
-	
+		
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address

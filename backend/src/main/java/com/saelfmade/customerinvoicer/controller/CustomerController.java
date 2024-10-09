@@ -1,6 +1,7 @@
 package com.saelfmade.customerinvoicer.controller;
 
 import com.saelfmade.customerinvoicer.model.Customer;
+import com.saelfmade.customerinvoicer.model.Invoice;
 import com.saelfmade.customerinvoicer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,4 +40,11 @@ public class CustomerController {
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
     }
+    
+    @PostMapping("/{id}/invoices")
+    public Customer addInvoiceToCustomer(@PathVariable Long id, @RequestBody Invoice invoice) {
+    	Customer customer = customerService.addInvoiceToCustomer(id, invoice);
+    	return customer;
+    }
+    
 }
