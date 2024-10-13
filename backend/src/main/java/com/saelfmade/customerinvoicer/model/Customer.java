@@ -2,6 +2,8 @@ package com.saelfmade.customerinvoicer.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +18,7 @@ public class Customer {
     private Address address;
     
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"customer"})
     private List<Invoice> invoices;
     
     Customer() {}

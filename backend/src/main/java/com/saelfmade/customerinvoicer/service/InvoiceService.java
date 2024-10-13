@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class InvoiceService {
@@ -19,7 +18,8 @@ public class InvoiceService {
     private InvoiceRepository invoiceRepository;
 
     public List<Invoice> getAllInvoices() {
-        return invoiceRepository.findAll();
+    	// Only return invoices where deleted = false
+    	return invoiceRepository.findAllActiveInvoices();
     }
 
     public Invoice saveInvoice(Invoice invoice) {
@@ -55,7 +55,9 @@ public class InvoiceService {
     }
 
     public void deleteInvoice(Long id) {
-        invoiceRepository.deleteById(id);
+    	Invoice invoice = getInvoiceById(id);
+        invoice.setDeleted(true); // Mark the invoice as deleted
+        invoiceRepository.save(invoice); // Save the updated state
     }
     
 //	// Fetch invoices by year

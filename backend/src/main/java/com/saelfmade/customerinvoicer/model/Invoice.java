@@ -28,6 +28,8 @@ public class Invoice {
     
     private double totalAmount;
     
+    private boolean deleted = false;
+    
     Invoice() {}
 
     public Invoice(Date invoiceDate, Date serviceDate, double totalAmount, Customer customer) {
@@ -103,7 +105,6 @@ public class Invoice {
 		this.description = description;
 	}
 
-
 	public Date getServiceDate() {
 		return serviceDate;
 	}
@@ -111,6 +112,14 @@ public class Invoice {
 	public void setServiceDate(Date serviceDate) {
 		this.serviceDate = serviceDate;
 	}
+	
+	public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 	
 	@Override
 	public String toString() {

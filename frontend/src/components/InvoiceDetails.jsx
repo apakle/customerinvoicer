@@ -136,7 +136,7 @@ const InvoiceDetails = () => {
             <div className="date-info mt-5 text-end">
                 <p>Wehr, den {new Date(invoice.invoiceDate).toLocaleDateString()}</p>
             </div>
-            <p className="mt-4"><strong>Rechnung Nr.:</strong> {invoice.invoiceNumber}</p>
+            <p className="mt-4"><strong>Rechnung Nr.: {invoice.invoiceNumber}</strong></p>
             <p className="mt-5">Für ihren Auftrag bedanke ich mich und berechne für meine Leistungen am {new Date(invoice.serviceDate).toLocaleDateString()}:</p>
 
             <table className="table mt-5" style={{ fontSize: '0.9rem' }}>

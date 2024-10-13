@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const InvoiceList = () => {
@@ -12,6 +12,8 @@ const InvoiceList = () => {
   const [selectedCustomer, setSelectedCustomer] = useState('all');
   const [sortColumn, setSortColumn] = useState('invoiceNumber');
   const [sortDirection, setSortDirection] = useState('asc');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`${backendUrl}/api/invoices`)
@@ -99,6 +101,24 @@ const InvoiceList = () => {
     setSelectedCustomer('all');
   };
 
+  const handleUpdate = (id) => {
+    navigate(`/invoices/${id}/edit`);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this invoice?')) {
+      axios.delete(`${backendUrl}/api/invoices/${id}`)
+        .then(response => {
+          console.log('Invoice deleted:', response.status);
+          setInvoices(prevDetails => prevDetails.filter(invoice => invoice.id !== id)); // Remove deleted invoice from state
+        })
+        .catch(error => {
+          console.error('Error deleting invoice:', error);
+          alert('Error deleting invoice. Please try again.');
+        });
+    }
+  }; 
+
   return (
     <div className="card">
       <div className="card-header">
@@ -155,6 +175,7 @@ const InvoiceList = () => {
                 <th onClick={() => handleSort('totalAmount')}>
                   Rechnungsbetrag {sortColumn === 'totalAmount' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </th>
+                <th>Aktion</th>
               </tr>
             </thead>
             <tbody>
@@ -169,6 +190,10 @@ const InvoiceList = () => {
                   <td>{new Date(invoice.serviceDate).toLocaleDateString()}</td>
                   <td>{new Date(invoice.invoiceDate).toLocaleDateString()}</td>
                   <td>{invoice.totalAmount}</td>
+                  <td className="d-grid gap-1 d-lg-flex">
+                    <button onClick={() => handleUpdate(invoice.id)} className="btn btn-primary">Updaten</button>
+                    <button onClick={() => handleDelete(invoice.id)} className="btn btn-danger">Löschen</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

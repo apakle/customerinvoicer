@@ -4,44 +4,49 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const InvoiceForm = () => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
+    const { id } = useParams();
     const [customers, setCustomers] = useState([]);
     const [customer, setCustomer] = useState('');
-    const [selectedCustomer, setSelectedCustomer] = useState('');
+    const [selectedCustomerId, setSelectedCustomerId] = useState('');
     const [positions, setPositions] = useState([{ position: 1, quantity: '', description: '', price: '' }]);
     const [invoice, setInvoice] = useState({ invoiceDate: new Date().toISOString().split('T')[0], serviceDate: '', description: '', positions: [] });
 
+    const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
-    const { id } = useParams(); // Get the invoice ID from the URL
 
     useEffect(() => {
         // Fetch customers for selection
         axios.get(`${backendUrl}/api/customers`)
             .then(response => setCustomers(response.data))
             .catch(error => console.error('Error fetching customers:', error));
+    }, [backendUrl]);
 
-        // If an ID is present, fetch the existing invoice
+    useEffect(() => {
         if (id) {
-            axios.get(`${backendUrl}/api/invoices/${id}`)
-                .then(response => {
-                    const fetchedInvoice = response.data;
-                    console.log('Fetched Invoice:', fetchedInvoice); 
-                    setInvoice({
-                        invoiceNumber: fetchedInvoice.invoiceNumber,
-                        invoiceDate: new Date(fetchedInvoice.invoiceDate).toLocaleDateString('en-CA'),                        
-                        serviceDate: new Date(fetchedInvoice.serviceDate).toLocaleDateString('en-CA'),
-                        description: fetchedInvoice.description,
-                        positions: fetchedInvoice.positions,
-                    });
-                    setSelectedCustomer(fetchedInvoice.customer.id); 
-                    setPositions(fetchedInvoice.positions);
-                    setCustomer(fetchedInvoice.customer);
-                })
-                .catch(error => console.error('Error fetching invoice:', error));
+          setIsEdit(true); // Set form to edit mode if there's an ID
+          axios.get(`${backendUrl}/api/invoices/${id}`)
+            .then(response => {
+                const fetchedInvoice = response.data;
+                setInvoice({
+                    invoiceNumber: fetchedInvoice.invoiceNumber,
+                    invoiceDate: new Date(fetchedInvoice.invoiceDate).toLocaleDateString('en-CA'),                        
+                    serviceDate: new Date(fetchedInvoice.serviceDate).toLocaleDateString('en-CA'),
+                    description: fetchedInvoice.description,
+                    positions: fetchedInvoice.positions,
+                });
+                setSelectedCustomerId(fetchedInvoice.customer.id); 
+                setPositions(fetchedInvoice.positions);
+                setCustomer(fetchedInvoice.customer);
+            })
+            .catch(error => console.error('Error fetching invoice:', error));
+        } else {
+          // Reset the form if there's no ID
+          setIsEdit(false);          
         }
-    }, [backendUrl, id]);
+      }, [id, backendUrl]); 
 
     const handleCustomerChange = (event) => {
-        setSelectedCustomer(event.target.value);
+        setSelectedCustomerId(event.target.value);
     };
 
     const handleInvoiceChange = (event) => {
@@ -64,7 +69,7 @@ const InvoiceForm = () => {
     const removePosition = (index) => {
         const updatedPositions = positions.filter((_, i) => i !== index).map((position, i) => ({
             ...position,
-            position: i + 1 // Reassign position numbers after removal
+            position: i + 1  // Reassign position numbers after removal
         }));
         setPositions(updatedPositions);
         setInvoice(prevState => ({ ...prevState, positions: updatedPositions }));
@@ -72,7 +77,7 @@ const InvoiceForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (!selectedCustomer) {
+        if (!selectedCustomerId) {
             alert('Please select a customer.');
             return;
         }
@@ -81,10 +86,9 @@ const InvoiceForm = () => {
             alert('Please add at least one valid position.');
             return;
         }
-
+        
         const invoiceData = {
             ...invoice,
-            customer: { id: selectedCustomer },  // Attach customer ID correctly
             positions: positions.map(p => ({
                 position: p.position,
                 quantity: p.quantity,
@@ -92,17 +96,24 @@ const InvoiceForm = () => {
                 price: p.price
             }))
         };
-        console.log('##########', invoiceData)
 
-        const request = id
+        if (isEdit) {
+            const filteredCustomer = customers.filter(customer => customer.id === Number(selectedCustomerId))[0];
+            // Exclude the "invoices" field from customer
+            const { invoices, ...customerWithoutInvoices } = filteredCustomer;
+            
+            invoiceData.customer = customerWithoutInvoices;  // Attach customer data
+        }
+
+        const request = isEdit
             ? axios.put(`${backendUrl}/api/invoices/${id}`, invoiceData) // Use PUT if updating
-            : axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomer}`, invoiceData); // Use POST if creating
+            : axios.post(`${backendUrl}/api/invoices/customer/${selectedCustomerId}`, invoiceData); // Use POST if creating
 
         request
             .then(response => {
                 console.log('Invoice processed:', response.data);
                 const processedInvoiceId = response.data.id;
-                // navigate(`/invoices/${processedInvoiceId}`);
+                navigate(`/invoices/${processedInvoiceId}`);
             })
             .catch(error => console.error('Error processing invoice:', error));
     };
@@ -110,7 +121,7 @@ const InvoiceForm = () => {
     return (
         <div className="card">
             <div className="card-header">
-                <h2>{id ? 'Rechnung bearbeiten' : 'Rechnung erstellen'}</h2> {/* Change title based on mode */}
+                <h2>{isEdit ? 'Rechnung bearbeiten' : 'Rechnung erstellen'}</h2>
             </div>
             <div className="card-body">
                 <form onSubmit={handleSubmit} className="mt-3">
@@ -118,7 +129,7 @@ const InvoiceForm = () => {
                     <div className="row g-3 mb-3">
                         <div className="col-md-4 col-12">
                             <label htmlFor="customer" className="form-label">Kunde:</label>
-                            <select id="customer" value={selectedCustomer} onChange={handleCustomerChange} className="form-select w-100" required>
+                            <select id="customer" value={selectedCustomerId} onChange={handleCustomerChange} className="form-select w-100" required>
                                 <option value="">Wähle einen Kunden</option>
                                 {customers.map(customer => (
                                     <option key={customer.id} value={customer.id}>
@@ -232,7 +243,7 @@ const InvoiceForm = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <button type="submit" className="btn btn-primary">{id ? 'Rechnung aktualisieren' : 'Rechnung erstellen'}</button> {/* Change button text based on mode */}
+                    <button type="submit" className="btn btn-primary">{isEdit ? 'Rechnung aktualisieren' : 'Rechnung erstellen'}</button>
                 </form>
             </div>
         </div>
