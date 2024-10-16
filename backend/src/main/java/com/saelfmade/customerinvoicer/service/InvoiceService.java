@@ -1,5 +1,6 @@
 package com.saelfmade.customerinvoicer.service;
 
+import com.saelfmade.customerinvoicer.model.Customer;
 import com.saelfmade.customerinvoicer.model.Invoice;
 import com.saelfmade.customerinvoicer.model.InvoicePosition;
 import com.saelfmade.customerinvoicer.repository.InvoiceRepository;
@@ -16,6 +17,9 @@ public class InvoiceService {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+    
+    @Autowired
+    private CustomerService customerService;
 
     public List<Invoice> getAllInvoices() {
     	// Only return invoices where deleted = false
@@ -30,19 +34,21 @@ public class InvoiceService {
     }
 
     public Invoice getInvoiceById(Long id) {
-        return invoiceRepository.findById(id)
-        		.orElseThrow(() -> new RuntimeException("Invoice not found with id: " + id));
+        return invoiceRepository.findByIdAndNotDeleted(id)
+        		.orElseThrow(() -> new RuntimeException("Invoice not found or has been deleted with id: " + id));
     }
     
     public Invoice updateInvoice(Long id, Invoice updatedInvoice) {
         // Fetch the existing invoice
     	Invoice existingInvoice = getInvoiceById(id);    	
-    	// Update all fields except the ID
-        existingInvoice.setInvoiceNumber(updatedInvoice.getInvoiceNumber());
+    	// Fetch customer fully based on ID
+        Customer customer = customerService.getCustomerById(updatedInvoice.getCustomer().getId());
+        
+    	// Update all fields except the id and invoiceNumber
         existingInvoice.setInvoiceDate(updatedInvoice.getInvoiceDate());
         existingInvoice.setServiceDate(updatedInvoice.getServiceDate());
         existingInvoice.setDescription(updatedInvoice.getDescription());
-        existingInvoice.setCustomer(updatedInvoice.getCustomer());
+        existingInvoice.setCustomer(customer);
         
         // Update the positions: remove orphaned positions and add new ones
         existingInvoice.getPositions().clear();

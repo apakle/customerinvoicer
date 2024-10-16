@@ -6,7 +6,6 @@ const InvoiceForm = () => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const { id } = useParams();
     const [customers, setCustomers] = useState([]);
-    const [customer, setCustomer] = useState('');
     const [selectedCustomerId, setSelectedCustomerId] = useState('');
     const [positions, setPositions] = useState([{ position: 1, quantity: '', description: '', price: '' }]);
     const [invoice, setInvoice] = useState({ invoiceDate: new Date().toISOString().split('T')[0], serviceDate: '', description: '', positions: [] });
@@ -36,7 +35,6 @@ const InvoiceForm = () => {
                 });
                 setSelectedCustomerId(fetchedInvoice.customer.id); 
                 setPositions(fetchedInvoice.positions);
-                setCustomer(fetchedInvoice.customer);
             })
             .catch(error => console.error('Error fetching invoice:', error));
         } else {
@@ -98,11 +96,7 @@ const InvoiceForm = () => {
         };
 
         if (isEdit) {
-            const filteredCustomer = customers.filter(customer => customer.id === Number(selectedCustomerId))[0];
-            // Exclude the "invoices" field from customer
-            const { invoices, ...customerWithoutInvoices } = filteredCustomer;
-            
-            invoiceData.customer = customerWithoutInvoices;  // Attach customer data
+            invoiceData.customer = { id: selectedCustomerId };
         }
 
         const request = isEdit
@@ -121,7 +115,7 @@ const InvoiceForm = () => {
     return (
         <div className="card">
             <div className="card-header">
-                <h2>{isEdit ? 'Rechnung bearbeiten' : 'Rechnung erstellen'}</h2>
+                <h2>{isEdit ? `Rechnung ${invoice.invoiceNumber} bearbeiten` : 'Rechnung erstellen'}</h2>
             </div>
             <div className="card-body">
                 <form onSubmit={handleSubmit} className="mt-3">
