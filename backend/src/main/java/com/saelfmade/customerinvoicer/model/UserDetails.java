@@ -21,8 +21,7 @@ public class UserDetails {
 
     public UserDetails() {}
     
-    public UserDetails(String name, Address address, String phoneNumber, String iban, String bank, String bic,
-			String taxNumber) {
+    public UserDetails(String name, Address address, String phoneNumber, String iban, String bank, String bic, String taxNumber) {
 		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
