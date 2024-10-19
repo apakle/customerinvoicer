@@ -38,8 +38,19 @@ const InvoiceForm = () => {
             })
             .catch(error => console.error('Error fetching invoice:', error));
         } else {
-          // Reset the form if there's no ID
-          setIsEdit(false);          
+          // Reset the form if there's no ID (create mode)
+          setIsEdit(false);
+          setInvoice({ 
+            invoiceDate: new Date().toISOString().split('T')[0], 
+            serviceDate: '', 
+            description: ''
+          });
+          setSelectedCustomerId('');
+          setPositions([{ position: 1, 
+            quantity: '', 
+            description: '', 
+            price: '' 
+          }]);
         }
       }, [id, backendUrl]); 
 
