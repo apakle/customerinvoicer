@@ -9,6 +9,8 @@ public class UserDetails {
     private Long id;
     
     private String name;
+    private String username;
+    private String password;
     
     @Embedded
     private Address address;
@@ -47,7 +49,23 @@ public class UserDetails {
         this.name = name;
     }
 
-    public Address getAddress() {
+    public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Address getAddress() {
         return address;
     }
 
