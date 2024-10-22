@@ -1,6 +1,5 @@
 package com.saelfmade.customerinvoicer.config;
 
-import com.saelfmade.customerinvoicer.security.CustomUserDetailsService;
 import com.saelfmade.customerinvoicer.security.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;

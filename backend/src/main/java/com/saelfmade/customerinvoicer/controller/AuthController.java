@@ -3,8 +3,9 @@ package com.saelfmade.customerinvoicer.controller;
 import com.saelfmade.customerinvoicer.model.AuthenticationRequest;
 import com.saelfmade.customerinvoicer.model.AuthenticationResponse;
 import com.saelfmade.customerinvoicer.model.UserDetails;
-import com.saelfmade.customerinvoicer.security.CustomUserDetailsService;
 import com.saelfmade.customerinvoicer.security.JwtUtil;
+import com.saelfmade.customerinvoicer.service.CustomUserDetailsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package com.saelfmade.customerinvoicer.security;
+package com.saelfmade.customerinvoicer.service;
 
 import com.saelfmade.customerinvoicer.model.UserDetails;
 import com.saelfmade.customerinvoicer.repository.UserDetailsRepository;
@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
+        return new User(user.getUsername(), user.getPassword(), new ArrayList<>()); // Roles/authorities can be added in the ArrayList if needed
     }
 
     public void saveUser(UserDetails user) {
