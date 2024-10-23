@@ -2,14 +2,13 @@ package com.saelfmade.customerinvoicer.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import org.springframework.stereotype.Component;
-
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +16,8 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-
-    // Use a strong, secure key
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // Generate a 256-bit (32-byte) secret key
+    private final SecretKey key = Keys.hmacShaKeyFor(new byte[32]);  // In production, use a proper secret key
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -35,11 +33,15 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractExpiration(token).before(Date.from(Instant.now()));
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -48,12 +50,13 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
+        Instant now = Instant.now();
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
-                .signWith(key, SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plus(10, ChronoUnit.HOURS))) // 10 hours
+                .signWith(key, Jwts.SIG.HS256)
                 .compact();
     }
 
